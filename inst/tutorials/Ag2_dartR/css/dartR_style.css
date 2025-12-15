@@ -25,6 +25,8 @@ Contrast compliancy grid at: https://contrast-grid.eightshapes.com/?version=1.1.
 
 
 
+
+
 .inline-image{
   height: 1em;
 }
@@ -37,7 +39,7 @@ body {
 
 /*-------- Main Panel ---------*/
 .topics {
-    width: 75%;
+    width: 80%;
     overflow-x: auto;
     padding-bottom: 600px;
     padding-left: 20px;
@@ -46,6 +48,16 @@ body {
     border-left: 0;
     border-right: 0;
 }
+
+
+@media (max-width: 768px) {
+  .topics {
+    width: 95%;
+    padding-left: 10px;
+    padding-right: 10px;
+  }
+}
+
 
 /*------- padding sides --------*/
 .band {
@@ -226,7 +238,17 @@ pre.sourceCode {
 pre:not([class]) {
     background-color: white;
     border: 1px solid rgba(66, 116, 121, 0.1);
+    font-size: 12px;
 }
+
+
+
+pre.sourceCode, pre {
+  overflow-x: auto;         /* horizontal scroll for long lines */
+  white-space: pre;         /* keep code formatting */
+  word-wrap: normal;        /* don’t break code lines */
+}
+
 
 /*------- In line code aesthetic --------*/
 code {
@@ -480,14 +502,20 @@ a:hover, a:focus {
 
 .left_txt {
   float: left;
-  width: 25%;
+  width: 20%;
 }
 
 
 
 .right_txt {
-  width: 75%;
+  width: 80%;
 }
+
+
+
+
+
+
 
 .sidebar {
   background-color: #f0f0f0; /* Example: light grey */
@@ -589,3 +617,7 @@ a:hover, a:focus {
   background-color: white;
   border-bottom-right-radius: 10px;
 }
+
+
+
+

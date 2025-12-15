@@ -296,40 +296,58 @@ write.table(loc_data_keep_nodups,
 
 
 # metadata ----------------------------------------------------------------
-metaweights <- tw_final@other$ind.metrics %>% 
-  mutate(svlmin = case_when(
-    age == 'A' ~ 48,
-    age == 'SA' ~ 38,
-    age == 'J' ~ 20
-  ),
-  svlmax = case_when(
-    age == 'A' ~ 85,
-    age == 'SA' ~ 48,
-    age == 'J' ~ 38
-  ),
-  mweight = case_when(
-    age == 'A' ~ 5.5,
-    age == 'SA' ~ 4,
-    age == 'J' ~ 3
-  )) %>% 
-  rowwise() %>% 
-  mutate(svl = runif(1, min = svlmin, max = svlmax),
-         weight = rnorm(1, mweight, 0.5)) %>% 
-  mutate(svl = ifelse(is.nan(svl),NA, svl),
-         weight = ifelse(weight < 1, 1.13, weight),
-         weight = (svl*0.01+1)*weight)
+svlw <- read.csv('./data-raw/ged_weights_svl.csv') %>%
+  mutate(svl = as.numeric(svl),
+         weight = as.numeric(weight),
+         sex = case_when(
+           sex == 'female' ~ 'F',
+           sex == 'male' ~ 'M',
+           .default = sex
+         )) %>% 
+  filter(complete.cases(svl), complete.cases(weight),
+         weight < 40) %>% 
+  mutate(link = paste0('AA', rownames(.)))
+svlw$svl %>% as.numeric() %>% summary
+tapply(svlw$svl, svlw$sex, length)
+boxplot(svl ~ sex, data = svlw)
+nrow(svlw)
+head(svlw)
+set.seed(1111)
+svlw <- svlw[sample(1:nrow(svlw), nrow(svlw), replace = F),]
 
-tw_final@other$ind.metrics$svl = round(metaweights$svl,1)
-tw_final@other$ind.metrics$weight = round(metaweights$weight,2)
-tw_final@other$ind.metrics$age <- factor(tw_final@other$ind.metrics$age)
+plot(log(weight) ~ log(svl), data = svlw)
+
+tw_sex <- tw_final@other$ind.metrics$sex
+tw_sex <- ifelse(grepl('M', tw_sex) |grepl('F', tw_sex) |grepl('J', tw_sex),
+                 as.character(tw_sex), 'U') 
+tw_sex <- sub('\\?' , '', tw_sex)
+sex_count <- as.data.frame(table(tw_sex))
+sex_count
+tw_meta <- data.frame(sex = tw_sex, link = NA)
+tw_meta$link[tw_meta$sex == 'F'] <- svlw$link[svlw$sex == 'F'][1:114]
+tw_meta$link[tw_meta$sex == 'M'] <- svlw$link[svlw$sex == 'M'][1:175]
+tw_meta$link[tw_meta$sex == 'J'] <- svlw$link[svlw$svl <38][1:58]
+
+tw_meta2 <- tw_meta %>% left_join(svlw) %>% select(-link) %>% 
+  mutate(age = ifelse(svl > 48, 'A', 'SA'),
+         age = ifelse(svl < 38, 'J', age))
+
+plot(log(weight) ~ log(svl), data = tw_meta2)
+plot((weight) ~ (svl), data = tw_meta2)
+
+summary(lm(weight ~svl, data = tw_meta2))
+summary(lm(log(weight) ~ log(svl), data = tw_meta2))
+# maxage == 'SA' ~ 48,
+# maxage == 'J' ~ 38
+table(tw_meta2$sex, tw_meta2$age)
+
+tw_final@other$ind.metrics$svl <- tw_meta2$svl 
+tw_final@other$ind.metrics$weight = tw_meta2$weight
+tw_final@other$ind.metrics$age <- factor(tw_meta2$age)
 tw_final@other$ind.metrics$species <- 'Tympanocryptis lineata'
 
-boxplot(metaweights$svl ~ metaweights$age)
-boxplot(metaweights$weight ~ metaweights$age)
-
-plot(metaweights$svl, metaweights$weight, col = metaweights$age)
-summary(lm(metaweights$weight~metaweights$svl+metaweights$age))
-
+boxplot(svl ~ age, data = tw_meta2)
+boxplot(weight ~ age, data = tw_meta2)
 
 
 levels(tw_final@other$ind.metrics$pop) <- c('Googong', 'Kowen', 'Royalla', 'Unknown', 'Tuggeranong')
@@ -339,7 +357,7 @@ tw_final@pop
 head(tw_final@other$ind.metrics)
 table(tw_final@pop)
 
-write.csv(tw_final@other$ind.metrics, './inst/extdata/Tympo_metadata.csv',
+write.csv(tw_final@other$ind.metrics, './inst/extdata/Tympo_ind_metadata.csv',
           row.names = F)
 
 # data --------------------------------------------------------------------
@@ -347,7 +365,7 @@ prjdir <- getwd()
 setwd('../dartR.intro/inst/extdata/')
 
 tympo.gl <- gl.read.dart('Report_DTym25-13579_SNP.csv',
-                         ind.metafile = 'Tympo_metadata.csv')
+                         ind.metafile = 'Tympo_ind_metadata.csv')
 tympo.gl@other$history
 usethis::use_data(tympo.gl, overwrite = TRUE)
 
@@ -355,7 +373,7 @@ usethis::use_data(tympo.gl, overwrite = TRUE)
 # test silico
 
 tympo.silico <- gl.read.silicodart('Report_DTym25-13579_SilicoDArT.csv',
-                             ind.metafile = 'Tympo_metadata.csv')
+                             ind.metafile = 'Tympo_ind_metadata.csv')
 
 setwd(prjdir)
   
