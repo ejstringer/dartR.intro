@@ -31,7 +31,7 @@ library(dartR.base)
 library(dartR.sexlinked)
 gl.set.verbosity(3)
 
-library(dartRintro) # for tutorial data
+#library(dartRintro) # for tutorial data
 source('./www/reassign_ind_function.R')
 
 ```
@@ -69,6 +69,8 @@ The first part of this tutorial are the worked examples, where we walk you throu
 - [Worked Ex 5-1: Filtering]
 
 - [Worked Ex 6-1: Exploratory Visualization]
+
+- [Exercises]
 
 Don't forget that all aspects of the material are beneficial for learning. The ebook for being introduced to the theory and methods, the worked examples to gain experience in the application, and finally the exercises to apply everything you have learned.
 
@@ -134,9 +136,10 @@ class(log)
 ### Vectors
 
 A vector is an object containing an ordered set of values all of the same type. Vectors are the fundamental building blocks of data in R so we visit vectors in some detail here.
+
 ### Creating Vectors
 
-Use the `c()` function (which stands for "combine" or "concatenate") to create vectors of class character, numeric or logical.
+Use the `c()` function (which stands for "combine" or "concatenate") to create vectors of class character, numeric, or logical.
 
 
 ```{r}
@@ -158,7 +161,7 @@ test_results <- c(TRUE, FALSE, TRUE, TRUE)
 test_results
 ```
 
-On occasion, you may with to initialize a vector to be populated during later computation. This can be done with
+On occasion, you may wish to initialize a vector to be populated during later computation. This can be done with
 
 ```{r}
 # Initializing an empty vector
@@ -592,11 +595,10 @@ metadata <- read.csv("Tympo_ind_metadata.csv")
 ```
 
 
-```{r datainput, echo = FALSE, cache=TRUE}
-prj <- getwd()
-setwd('./www/')
-metadata <- read.csv("Tympo_ind_metadata.csv")
-setwd(prj)
+```{r datainput, echo = FALSE, cache=FALSE}
+
+metadata <- read.csv("./www/Tympo_ind_metadata.csv")
+
 
 ```
 
@@ -761,7 +763,7 @@ df$logsvl <- log(df$svl)
 df[1:10,]
 ```
 
-There are lots of lessons here. First, to refer to a column in a dataframe, you need to precede the variable name with the dataframe name and a $. Otherwise R will not know where to look for it. Second, R does operations on vectors, item by item. No need to loop through the vector to apply the operation to each element. Finally, the assignment characters <- tell R to take the value of the calculation on the right-hand side and place it in the object on the left-hand side.
+There are lots of lessons here. First, to refer to a column in a dataframe, you need to precede the variable name with the dataframe name and a` $`. Otherwise R will not know where to look for it. Second, R does operations on vectors, item by item. No need to loop through the vector to apply the operation to each element. Finally, the assignment characters `<-` tell R to take the value of the calculation on the right-hand side and place it in the object on the left-hand side.
 
 So that is what is meant by assignment in R.
 
@@ -838,14 +840,14 @@ df[df$sex=="F" & df$svl>40.0,]
 We can select only those observations for which an indicator variable takes on particular values, 
 
 ```{r}
-df[is.element(df$id, c('AA24300','AA24111','AA24303')),]
+df[is.element(df$id, c('AA24187','AA24261','AA24349')),]
 ```
 
 
 and of course, these restrictive reference to the data can be used inside other functions,
 
 ```{r}
-summary(df[is.element(df$id, c('AA24300','AA24111','AA24303')),])
+summary(df[is.element(df$id, c('AA24187','AA24261','AA24349')),])
 ```
 
 A third approach is to split the data into subsets for further analysis
@@ -931,7 +933,7 @@ max_temps
 ##### lapply
 The `lapply()` function applies a specified function to each element of a list or vector and returns a list.
 
-```{r}
+```{r results='markup'}
 # List of experimental measurements from different trials
 trial_data <- list(
   trial_1 = c(12.3, 11.8, 12.7, 11.9, 12.1),
@@ -947,7 +949,7 @@ trial_means
 
 # Convert the list of values to a vector
 vec_means <- unlist(trial_means)
-trial_means
+vec_means
 
 ```
 
@@ -1001,7 +1003,7 @@ my_function("Hello Folks!")
 
 It is possible to put any number of statements inside the curly brackets, and so build quite sophisticated functions.
 
-Your own functions can be used in the lapply() function to apply it to the elements of a list or vector. This gives then great utility.
+Your own functions can be used in the lapply() function to apply it to the elements of a list or vector. This gives them great utility.
 
 For a more detailed account of working with the apply family of functions in R, refer to the AI summary on R functions. 
 
@@ -1043,14 +1045,13 @@ gl <- gl.read.dart("Report_DTym25-13579_SNP.csv",
 ```
 
 
-```{r echo = FALSE, cache=TRUE}
-prj <- getwd()
-setwd('./www/')
+```{r echo = FALSE, cache=FALSE}
 
-gl <- gl.read.dart("Report_DTym25-13579_SNP.csv",
-                   ind.metafile = "Tympo_ind_metadata.csv")
 
-setwd(prj)
+gl <- gl.read.dart("./www/Report_DTym25-13579_SNP.csv",
+                   ind.metafile = "./www/Tympo_ind_metadata.csv")
+
+
 
 ```
 
@@ -1120,8 +1121,7 @@ gl.save(gl,"Tympo_SNP_raw.RData")
 ```
 
 ```{r echo = FALSE}
-setwd('./www/')
-gl.save(gl,"Tympo_SNP_raw.RData")
+gl.save(gl,"./www/Tympo_SNP_raw.RData")
 ```
 
 Read it in again using:
@@ -1131,14 +1131,10 @@ gl.new <- gl.load("Tympo_SNP_raw.RData")
 ```
 
 ```{r e1, echo = FALSE}
-setwd('./www/')
-gl.new <- gl.load("Tympo_SNP_raw.RData")
+gl.new <- gl.load("./www/Tympo_SNP_raw.RData")
 ```
 
 
-```{r echo = FALSE}
-setwd(prj)
-```
 
 ### Clean up
 We have created files that we will not use again, so they should be removed from the workspace. Tidy up your workspace by removing the dartR genlight object `gl` and `gl.new`, assuming you do not want to access them again in raw form.
@@ -1172,14 +1168,10 @@ gl <- gl.load("Tympo_SNP_raw.RData")
 ```
 
 ```{r e2, echo = FALSE}
-setwd('./www/')
-gl <- gl.load("Tympo_SNP_raw.RData")
+
+gl <- gl.load("./www/Tympo_SNP_raw.RData")
 ```
 
-
-```{r echo = FALSE}
-setwd(prj)
-```
 
 Quickly examine the contents of your dartR genlight object by simply typing its name. This will give you the attributes associated with the object. Then lets engage in a little revision of material covered in Worked Ex 3-1.
 
@@ -1288,7 +1280,7 @@ gl.report.rdepth(gl)
 
 Linkage is an important consideration for many analyses. Fortunately, SNPs on separate sequence tags can be considered to assort independently because of the sparse nature of their sampling across the genome. However, if two SNPs occur in a non-recombining block of sequence, they will be co-inherited. This occurs for SNPs that reside in the non-recombining region of the sex chromosomes. They are referred to as sex-linked. The sex linkage report function identifies putative sex-linked SNP loci. Matched with `gl.filter.sexlinked()` (refer Chapter 5). For further help, type `?gl.report.sexlinked`
 
-```{r message=TRUE, cache=TRUE}
+```{r message=TRUE, cache=FALSE}
 gl.report.sexlinked(gl, system = 'xy')
 ```
 
@@ -1345,14 +1337,9 @@ gl <- gl.load("Tympo_SNP_raw.RData")
 ```
 
 ```{r e3, echo = FALSE}
-setwd('./www/')
-gl <- gl.load("Tympo_SNP_raw.RData")
+gl <- gl.load("./www/Tympo_SNP_raw.RData")
 ```
 
-
-```{r echo = FALSE}
-setwd(prj)
-```
 
 Check to see what populations object `gl` has defined.
 
@@ -1560,14 +1547,11 @@ gl <- gl.load("Tympo_SNP_raw.RData")
 ```
 
 ```{r e4, echo = FALSE}
-setwd('./www/')
-gl <- gl.load("Tympo_SNP_raw.RData")
+
+gl <- gl.load("./www/Tympo_SNP_raw.RData")
 ```
 
 
-```{r echo = FALSE}
-setwd(prj)
-```
 
 Quickly examine the contents of your genlight object. 
 
@@ -1779,7 +1763,7 @@ Hamming distance is a measure of sequence similarity between sequence tags. If t
 
 Run a report first to inform the choice of threshold. Note that this is computationally intensive. Maybe time for a coffee.
 
-```{r eval = FALSE, cache = TRUE}
+```{r eval = FALSE, cache = FALSE}
 gl.report.hamming(gl)
 ```
 
@@ -1808,8 +1792,7 @@ gl <- gl.load("Tympo_SNP_raw.RData") # 5276 loci
 
 
 ```{r echo = FALSE}
-setwd('./www/')
-gl <- gl.load("Tympo_SNP_raw.RData")
+gl <- gl.load("./www/Tympo_SNP_raw.RData")
 ```
 
 Have a look at the quality of the raw data using a smearplot – loci across the X axis, individuals up the Y axis.
@@ -1857,9 +1840,9 @@ gl.save(gl,"Tympo_SNP_filtered.RData")
 
 
 ```{r echo = FALSE}
-setwd('./www/')
-gl.save(gl,"Tympo_SNP_filtered.RData", )
-setwd(prj)
+
+gl.save(gl,"./www/Tympo_SNP_filtered.RData", )
+
 ```
 
 
@@ -1888,9 +1871,9 @@ gl <- gl.load("Tympo_SNP_filtered.RData")
 ```
 
 ```{r echo = FALSE}
-setwd('./www/')
-gl <- gl.load("Tympo_SNP_filtered.RData")
-setwd(prj)
+
+gl <- gl.load("./www/Tympo_SNP_filtered.RData")
+
 ```
 
 Quickly examine the contents of your genlight object. 
@@ -1960,15 +1943,15 @@ We finish with showing how to produce a geographic plot for studies where geogra
 gl.map.interactive(gl)
 ```
 
-```{r echo=FALSE}
+```{r eval=FALSE}
 #devtools::install_github("r-spatial/mapview")
 #gl.map.interactive(tympo.gl)
 
-library(leaflet)
+#library(leaflet)
 
-m<-leaflet() %>% addCircles(lng = tympo.gl@other$latlon$lon,
-                         lat = tympo.gl@other$latlon$lat,
-                         color = c('red', 'blue','green', 'yellow')[as.numeric(tympo.gl@pop)]) %>% 
+m<-leaflet() %>% addCircles(lng = gl@other$latlon$lon,
+                         lat = gl@other$latlon$lat,
+                         color = c('red', 'blue','green', 'yellow')[as.numeric(gl@pop)]) %>% 
   addTiles(urlTemplate = 'http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png')
  m 
 ```
@@ -1978,3 +1961,39 @@ A nice plot to give the study a geographic context. Note that the Canberra grass
 And that brings us to the end of the Worked Examples for this eBook on Getting Started with dartR. We hope that you have enjoyed the experience.
 
 [Back to Menu](#custom){.menuButton}
+
+## Exercises
+
+### EXERCISES
+Chapter 3 Exercises
+
+- Exercise 3-1: Reading in 1Row Format
+
+- Exercise 3-2: Reading in SilicoDArT Data
+
+Chapter 4 Exercises
+
+- Exercise 4-1: SNP Data QC
+
+- Exercise 4-2: SilicoDArT Data QC
+
+- Exercise 4-3: Using Recode Tables
+
+Chapter 5 Exercises
+
+- Exercise 5-1: Filtering SNP Data
+
+- Exercise 5-2: Filtering SilicoDArT Data
+
+Chapter 6 Exercises
+
+- Exercise 6-1: Visualizing Structure
+
+Integrative Exercises
+
+- Exercise 7-1: Camaroon Macrobrachium
+
+- Exercise 7-2: Western Sawshell Turtle
+
+- Exercise 7-3: Northern Quoll
+

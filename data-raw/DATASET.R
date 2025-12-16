@@ -132,7 +132,7 @@ diverseInd <- names(sort(rowSums(mat[,names(countHet[countHet==1])]==1, na.rm =T
 tw_final@other$ind.metrics[tw_final@other$ind.metrics$id==diverseInd,]
 
 
-gl.drop.ind(tw_final,diverseInd, mono.rm=TRUE)
+gl.drop.ind(tw_final,diverseInd, mono.rm=TRUE, verbose = 3)
 
 
 # tidy metadata -----------------------------------------------------------
@@ -161,7 +161,7 @@ keepsil <- which(silico@loc.names %in% tw_final@other$loc.metrics$CloneID)
 length(keepsil)
 length(unique(c(1:4010, keepsil)))
 
-silico_loc <- gl.keep.loc(silico, silico@loc.names[unique(c(1:4000, keepsil))])
+silico_loc <- gl.keep.loc(silico, silico@loc.names[unique(c(1:4024, keepsil))])
 silico_locind <- gl.keep.ind(silico_loc, ind.list = tw_final@ind.names)
 
 popid <- tw_final@other$ind.metrics[,c('id', 'pop')] %>% 
@@ -171,9 +171,8 @@ silico_locind@other$ind.metrics <-silico_locind@other$ind.metrics %>%
   left_join(popid)
 
 silico_locind <- gl.report.monomorphs(silico_locind)
-
+nLoc(silico_locind)
 # csv keep files ----------------------------------------------------------
-
 
 loc_data <- read.csv('./data-raw/SNPs_original.csv',
                      header = F)
@@ -241,7 +240,7 @@ nLoc(tw_final)
 # ## DELETE top row of file and move to extdata
 
 write.table(loc_data_keep_nodups,
-          './inst/extdata/Report_DTym25-13579_SNP.csv', sep = ',',
+          './inst/tutorials/Ag2_dartR/www/Report_DTym25-13579_SNP.csv', sep = ',',
           row.names = F, col.names = F) 
 
 
@@ -283,15 +282,16 @@ loc_data_keep_s <-loc_data_keep[c(1:7,keeploc),]
 ## remove duplicated ids
 dups_in_keep <- duplicated(as.vector(loc_data_keep_s[7,]))
 
-loc_data_keep_nodups <- loc_data_keep_s[,!dups_in_keep]
+loc_data_keep_nodups_silico <- loc_data_keep_s[,!dups_in_keep]
 # save new data
 
 #(nrow(loc_data_keep_nodups)-7)/2
 nLoc(silico_locind)
 
 
-write.table(loc_data_keep_nodups,
-            './inst/extdata/Report_DTym25-13579_SilicoDArT.csv', sep = ',',
+write.table(loc_data_keep_nodups_silico,
+            './inst/tutorials/Ag2_dartR/www/Report_DTym25-13579_SilicoDArT.csv',
+            sep = ',',
             row.names = F, col.names = F) 
 
 
@@ -328,7 +328,7 @@ tw_meta$link[tw_meta$sex == 'F'] <- svlw$link[svlw$sex == 'F'][1:114]
 tw_meta$link[tw_meta$sex == 'M'] <- svlw$link[svlw$sex == 'M'][1:175]
 tw_meta$link[tw_meta$sex == 'J'] <- svlw$link[svlw$svl <38][1:58]
 
-tw_meta2 <- tw_meta %>% left_join(svlw) %>% select(-link) %>% 
+tw_meta2 <- tw_meta %>% left_join(svlw[-1]) %>% select(-link) %>% 
   mutate(age = ifelse(svl > 48, 'A', 'SA'),
          age = ifelse(svl < 38, 'J', age))
 
@@ -340,10 +340,12 @@ summary(lm(log(weight) ~ log(svl), data = tw_meta2))
 # maxage == 'SA' ~ 48,
 # maxage == 'J' ~ 38
 table(tw_meta2$sex, tw_meta2$age)
-
+#tw_meta$sex[is.na(tw_final@other$ind.metrics$sex)] <- NA
 tw_final@other$ind.metrics$svl <- tw_meta2$svl 
 tw_final@other$ind.metrics$weight = tw_meta2$weight
 tw_final@other$ind.metrics$age <- factor(tw_meta2$age)
+tw_final@other$ind.metrics$sex <- factor(tw_meta2$sex)
+tw
 tw_final@other$ind.metrics$species <- 'Tympanocryptis lineata'
 
 boxplot(svl ~ age, data = tw_meta2)
@@ -357,12 +359,13 @@ tw_final@pop
 head(tw_final@other$ind.metrics)
 table(tw_final@pop)
 
-write.csv(tw_final@other$ind.metrics, './inst/extdata/Tympo_ind_metadata.csv',
+write.csv(tw_final@other$ind.metrics, 
+          './inst/tutorials/Ag2_dartR/www/Tympo_ind_metadata.csv',
           row.names = F)
 
 # data --------------------------------------------------------------------
 prjdir <- getwd()
-setwd('../dartR.intro/inst/extdata/')
+setwd('./inst/tutorials/Ag2_dartR/www/')
 
 tympo.gl <- gl.read.dart('Report_DTym25-13579_SNP.csv',
                          ind.metafile = 'Tympo_ind_metadata.csv')
