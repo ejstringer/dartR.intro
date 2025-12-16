@@ -19,6 +19,7 @@ knitr::opts_chunk$set(
 	echo = TRUE,
 	message = FALSE,
 	warning = FALSE,
+	cache = FALSE,
 	results = "hold"
 )
 
@@ -595,7 +596,7 @@ metadata <- read.csv("Tympo_ind_metadata.csv")
 ```
 
 
-```{r datainput, echo = FALSE, cache=FALSE}
+```{r datainput, echo = FALSE, cache=TRUE}
 
 metadata <- read.csv("./www/Tympo_ind_metadata.csv")
 
@@ -1045,7 +1046,7 @@ gl <- gl.read.dart("Report_DTym25-13579_SNP.csv",
 ```
 
 
-```{r echo = FALSE, cache=FALSE}
+```{r echo = FALSE, cache=TRUE}
 
 
 gl <- gl.read.dart("./www/Report_DTym25-13579_SNP.csv",
@@ -1139,8 +1140,13 @@ gl.new <- gl.load("./www/Tympo_SNP_raw.RData")
 ### Clean up
 We have created files that we will not use again, so they should be removed from the workspace. Tidy up your workspace by removing the dartR genlight object `gl` and `gl.new`, assuming you do not want to access them again in raw form.
 
-```{r}
+```{r eval = FALSE}
 rm(gl.new, gl)
+
+```
+
+```{r echo = FALSE}
+rm(gl.new)
 
 ```
 
@@ -1280,7 +1286,7 @@ gl.report.rdepth(gl)
 
 Linkage is an important consideration for many analyses. Fortunately, SNPs on separate sequence tags can be considered to assort independently because of the sparse nature of their sampling across the genome. However, if two SNPs occur in a non-recombining block of sequence, they will be co-inherited. This occurs for SNPs that reside in the non-recombining region of the sex chromosomes. They are referred to as sex-linked. The sex linkage report function identifies putative sex-linked SNP loci. Matched with `gl.filter.sexlinked()` (refer Chapter 5). For further help, type `?gl.report.sexlinked`
 
-```{r message=TRUE, cache=FALSE}
+```{r message=TRUE, cache=TRUE}
 gl.report.sexlinked(gl, system = 'xy')
 ```
 
