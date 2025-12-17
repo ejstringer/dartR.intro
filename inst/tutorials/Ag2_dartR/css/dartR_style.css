@@ -317,6 +317,7 @@ a:hover, a:focus {
 }
 
 
+
 /*------- Solution / Hint buttons -------*/
 .tutorial-exercise-input .btn-tutorial-solution {
     margin-left: 15px;
@@ -396,6 +397,8 @@ a:hover, a:focus {
 .tutorial-exercise-input .btn-xs{
     font-size: 13px;
 }
+
+
 
 .tutorial-exercise-input .btn-xs:hover {
     margin-right: 0;

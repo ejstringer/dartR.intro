@@ -11,16 +11,14 @@ output:
     highlight: 'monochrome'
     css: ./css/dartR_style.css
 runtime: shiny_prerendered
-description: "Introduction to dartR - using the Canberra grassland earless dragon as an example."
+description: "Let's get started learning to use dartR  ! A hands on guide"
 ---
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(
 	echo = TRUE,
 	message = FALSE,
-	warning = FALSE,
-	cache = FALSE,
-	results = "hold"
+	warning = FALSE
 )
 
 #necessary to render tutorial correctly
@@ -71,7 +69,11 @@ The first part of this tutorial are the worked examples, where we walk you throu
 
 - [Worked Ex 6-1: Exploratory Visualization]
 
-- [Exercises]
+**Exercises**
+
+- [Worked Example Exercises]
+
+- [Integrative Exercises]
 
 Don't forget that all aspects of the material are beneficial for learning. The ebook for being introduced to the theory and methods, the worked examples to gain experience in the application, and finally the exercises to apply everything you have learned.
 
@@ -97,13 +99,22 @@ R works with objects, that is, with self-contained entities that have defined at
 When you create an object in R, attributes are assigned to it by default. The decision is made behind the scenes. 
 
 
+```{r data4}
+x <- 3
+```
 
-```{r}
+
+```{r ex21a, exercise = TRUE, exercise.setup = "data4"}
 x <- 12
 class(x)
 ```
 
-```{r}
+```{r ex21a-solution}
+
+```
+
+
+```{r ex21b, exercise = TRUE}
 x <- "pumkin"
 class(x)
 ```
@@ -113,21 +124,21 @@ class(x)
 A Scalar is an object that contains a single value. It could be a number, or a character string, or a logical variable (`TRUE` or `FALSE`).
 
 
-```{r}
+```{r ex21c, exercise = TRUE}
 # Character scalar
 chr <- "Juvenile"
 chr
 class(chr)
 ```
 
-```{r}
+```{r  ex21d, exercise = TRUE}
 # Numeric scalar
 num <- 6
 num
 class(num)
 ```
 
-```{r}
+```{r  ex21e, exercise = TRUE}
 # Logical scalar
 log <- TRUE
 log
@@ -143,20 +154,20 @@ A vector is an object containing an ordered set of values all of the same type. 
 Use the `c()` function (which stands for "combine" or "concatenate") to create vectors of class character, numeric, or logical.
 
 
-```{r}
+```{r ex21f, exercise = TRUE}
 # Character vector (text)
 names <- c("Alice", "Bob", "Carol", "Dave")
 names
 ```
 
-```{r}
+```{r ex21g, exercise = TRUE}
 # Numeric vector
 temperatures <- c(72, 68, 75, 71, 69)
 temperatures
 ```
 
 
-```{r}
+```{r ex21h, exercise = TRUE}
 # Logical vector (TRUE/FALSE)
 test_results <- c(TRUE, FALSE, TRUE, TRUE)
 test_results
@@ -164,7 +175,7 @@ test_results
 
 On occasion, you may wish to initialize a vector to be populated during later computation. This can be done with
 
-```{r}
+```{r ex21i, exercise = TRUE}
 # Initializing an empty vector
 vec <- vector("logical", 20) # Creates logical NAs 
 vec[] <- NA # Explicitly set all to NA 
@@ -173,7 +184,7 @@ vec
 
 Note: In R, even scalar values are vectors
 
-```{r}
+```{r ex21j, exercise = TRUE}
 single_value <- 42
 is.vector(single_value)
 length(single_value)
@@ -183,12 +194,18 @@ length(single_value)
 
 
 
-```{r}
+```{r ex21k, exercise = TRUE}
 # Create a vector
 width <- c(10.4,5.6,3.1,6.4,21.7)
 # Access a single element
 width[4]
 ```
+
+```{r echo = FALSE}
+width <- c(10.4,5.6,3.1,6.4,21.7)
+names <- c("Alice", "Bob", "Carol", "Dave")
+```
+
 
 ```{r results='markup'}
 # Access multiple specific elements
@@ -402,7 +419,7 @@ df <- read.table("my_input.dat", header=FALSE)
 df <- read.table("./www/my_input.dat", header=FALSE)
 ```
 
-This statement assigns the data in the raw datafile [my_input.dat]{style = "color: green;"} to the dataframe `df`. 
+This statement assigns the data in the raw datafile [my_input.dat]{style = "color: blue;"} to the dataframe `df`. 
 
 To examine the contents of the dataframe to see if it has been input correctly, simply type the dataframe name.
 
@@ -580,7 +597,7 @@ There are several common methods for loading data into R, each suited for differ
 
 CSV Files are the most common format for scientific data exchange. They comprise rows with the values to be assigned to each column separated by commas. 
 
-Download to your working directory, a csv file containing metadata for individuals to be used in later analyses. It is called [Tympo_ind_metadata.csv]{style ="color: green;"}.
+Download to your working directory, a csv file containing metadata for individuals to be used in later analyses. It is called [Tympo_ind_metadata.csv]{style ="color: blue;"}.
 
 Forgotten the path to your working directory?
 
@@ -893,7 +910,7 @@ for (i in seq_len(nrow(df))) {
 		df$body_condition[i] <- NA
 	}# Terminate the IF - ELSE IF - ELSE statement
 } # Terminate the FOR loop
-df[1:10,]
+df[1:10,c('id', 'pop', 'sex', 'svl', 'weight', 'body_condition')]
 ```
 
 
@@ -1161,7 +1178,7 @@ That brings us to the end of the worked example. You are now a pro.
 ###
 This worked example will take you by the hand and lead you through the analyses covered so far in Chapter 4. We again consider the dataset introduced in Chapter 3, that of the Canberra Grassland Earless Dragon, *Tympanocryptis lineata*.
 
-In Worked Ex 3-1, you would have saved the data in binary form in [Tympo_SNP_raw.RData.]{style="color:green;"} This file should be in your project directory Book_Project. If it is not, you will need to go back to Worked Ex 3-1 and regenerate this binary file.
+In Worked Ex 3-1, you would have saved the data in binary form in [Tympo_SNP_raw.RData.]{style="color:blue;"} This file should be in your project directory Book_Project. If it is not, you will need to go back to Worked Ex 3-1 and regenerate this binary file.
 
 Below we step through the analysis with you. Please copy the code, paste it or type it in the Editor Window and submit it as you go along. The output should match that provided below. Feel free to wander and explore yourself along the way.
 
@@ -1437,7 +1454,7 @@ To bulk reassign populations or delete populations, a recode table must first be
 gl.make.recode.pop(gl, out.recode.file = "my_recode_pop_table.csv",outpath = getwd())
 ```
 
-Open the file [my_recode_pop_table.csv]{style="color:green;"} and edit the second column to make some new population labels to replace the old, and to delete some populations. Save the csv file, then apply it to create a new modified dartR genlight object.
+Open the file [my_recode_pop_table.csv]{style="color:blue;"} and edit the second column to make some new population labels to replace the old, and to delete some populations. Save the csv file, then apply it to create a new modified dartR genlight object.
 
 
 ```{r eval = FALSE}
@@ -1457,7 +1474,7 @@ popNames(gl)
 popNames(gl.new)
 ```
 
-Delete gl.new as it is no longer needed.
+Delete `gl.new` as it is no longer needed.
 
 ```{r}
 rm(gl.new)
@@ -1539,7 +1556,7 @@ We have created files that we will not use again, so they should be removed from
 
 This worked example will take you by the hand and lead you through the analyses for filtering loci and individuals based on specified thresholds. Those thresholds are typically determined using the report functions introduced in Chapter 3, though often the default values will suffice. We will work again with the real dataset on the Canberra grassland earless dragon introduced in Chapter 3. 
 
-In Worked Ex 3-1, you would have saved the data in binary form in [Tympo_SNP_raw.RData]{style="color:green;"}. This file should be in your project directory Book_Project. If it is not, you will need to go back to Chapter 3 and regenerate this binary file.
+In Worked Ex 3-1, you would have saved the data in binary form in [Tympo_SNP_raw.RData]{style="color:blue;"}. This file should be in your project directory Book_Project. If it is not, you will need to go back to Chapter 3 and regenerate this binary file.
 
 Do not forget to set global verbosity to 3, `gl.set.verbosity(3)`.
 
@@ -1904,17 +1921,23 @@ gl
 Only 1.2% of the 1077 SNP scores are missing (NA). That is well within the tolerances of PCA.
 To run the PCA, use
 
-```{r}
+```{r eval = FALSE}
 pca <- gl.pcoa(gl)
 ```
+
+
+```{r}
+pca <- readRDS('./www/pca.rds')
+```
+
 
 
 The results of the PCA show that of the ordered PCA axes, PCA1 explains 9.1% of the total variation in the dataset, PCA2 explains a further 7.8% and PCA3 explains a further 2.5% of total variation. Looking at the scree plot, 61 axes are regarded as informative (explaining more than the 615 original variables on average), but all but the first threepcoa add only marginal additional explanatory value.
 
 Now for the visualization.
 
-```{r}
-gl.pcoa.plot(pca, gl)
+```{r eval = FALSE}
+pc.plot <- gl.pcoa.plot(pca, gl)
 ```
 
 
@@ -1925,7 +1948,7 @@ Kowen is also quite distinct, but the allelic profiles individuals from the othe
 We hope that you can see the power of this exploratory visual technique.
 If you want to identify the migrants, you can use the parameter interactive=TRUE and mouse-over the points to obtain their identities.
 
-```{r}
+```{r eval = FALSE}
 gl.pcoa.plot(pca, gl, interactive=TRUE)
 ```
 
@@ -1933,7 +1956,7 @@ We cannot show this here, but when you run this command from the RStudio Editor 
 
 One final point relates to visualization in only two dimensions. The first two PCA axes explain the bulk of the structural signal in the data, but the third dimension may also be informative. This means that proximity as seen in the first two dimensions may prove to be an illusion when the third dimension is considered.
 
-```{r}
+```{r eval = FALSE}
 gl.pcoa.plot(pca,gl,xaxis=1,yaxis=3)
 ```
 
@@ -1949,11 +1972,11 @@ We finish with showing how to produce a geographic plot for studies where geogra
 gl.map.interactive(gl)
 ```
 
-```{r eval=FALSE}
+```{r echo=FALSE, eval=FALSE}
 #devtools::install_github("r-spatial/mapview")
 #gl.map.interactive(tympo.gl)
 
-#library(leaflet)
+library(leaflet)
 
 m<-leaflet() %>% addCircles(lng = gl@other$latlon$lon,
                          lat = gl@other$latlon$lat,
@@ -1968,38 +1991,145 @@ And that brings us to the end of the Worked Examples for this eBook on Getting S
 
 [Back to Menu](#custom){.menuButton}
 
-## Exercises
+## Worked Example Exercises
 
-### EXERCISES
+### EXERCISES (click to expand)
 Chapter 3 Exercises
 
-- Exercise 3-1: Reading in 1Row Format
+<details>
 
-- Exercise 3-2: Reading in SilicoDArT Data
+<summary><b>[Exercise 3-1: Reading in 1Row Format </b>]{style="color:black; cursor:pointer"}</summary>
+
+-	Open the file [sample_data_1Row.csv]{style="color:blue;"} in Excel. This is a set of SNP data for Emydura, a freshwater turtle,  in 1-row format as would be supplied by Diversity Arrays Technology Pty Ltd.
+
+-	Refer to the documentation on the Diversity Arrays Technology web page to understand the scoring of SNPs in the 1-row format.
+
+-	Also refer to the MetaDataDefinition file provided by Diversity Arrays Technology as part of their report. In this case, a definition file is provided as [sample_metadata.xlsx]{style="color:blue;"}.
+
+-	Now examine the individual metadata in the file [sample_data_1Row.csv]{style="color:blue;"}. Note the two mandatory columns [id]{style="color:blue;"} and [pop]{style="color:blue;"}.
+
+-	Create a new script in the RStudio Editor Window and add the lines
+
+```{r}
+# EXERCISE 1: 1-Row Format
+# Input data from sample_data_1Row.csv, 
+#  associate with sample_metadata.csv
+```
+
+-	Add a statement to read the SNP data in to dartR as a genlight object called `gl.1row`
+
+-	Add a statement to examine a summary of the contents of `gl.1row`
+
+-	Use the `as.matrix()` function to display the genotypes for the first 5 individuals and the first 10 loci.
+
+</details>
+
+<details>
+
+<summary><b>[Exercise 3-2: Reading in SilicoDArT Data </b>]{style="color:black; cursor:pointer"}</summary>
+
+-	Open the file [sample_data_silicodart.csv]{style="color:blue;"} in Excel. This is a set of marker presence/absence data for Cherax destructor provided in SilicoDArT format by Diversity Arrays Technology Pty Ltd.
+
+-	Refer to the documentation on the Diversity Arrays Technology web page to understand the scoring of the data in the SilicoDArT format.
+
+-	Also refer to the MetaDataDefinition file provided by Diversity Arrays Technology as part of their report. In this case, a definition file is provided as [sample_metadata.xlsx]{style="color:blue;"}.
+
+-	Now examine the individual metadata in the file sample_data_1Row.csv. Note the two mandatory columns [id]{style="color:blue;"} and [pop]{style="color:blue;"}.
+
+-	Create a new script in the RStudio Editor Window and add the lines
+
+```{r}
+ # EXERCISE 2: SilicoDArT data
+ # Input data from sample_data_SilicoDArT.csv, 
+ #  associate with sample_metadata.csv
+```
+
+-	Add a statement to read the SNP data in to dartR as a genlight object called `gs`.
+
+-	Add a statement to examine a summary of the contents of `gs`.
+
+-	Use the `as.matrix()` function to display the genotypes for the first 5 individuals and the first 10 loci.
+
+</details>
+
+<br>
 
 Chapter 4 Exercises
 
-- Exercise 4-1: SNP Data QC
+<details>
 
-- Exercise 4-2: SilicoDArT Data QC
+<summary><b>[Exercise 4-1: SNP Data QC</b>]{style="color:black; cursor:pointer"}</summary>
 
-- Exercise 4-3: Using Recode Tables
+</details>
+
+
+
+<details>
+
+<summary><b>[Exercise 4-2: SilicoDArT Data QC</b>]{style="color:black; cursor:pointer"}</summary>
+
+</details>
+
+
+
+<details>
+
+<summary><b>[Exercise 4-3: Using Recode Tables</b>]{style="color:black; cursor:pointer"}</summary>
+
+
+</details>
+
+<br>
 
 Chapter 5 Exercises
 
-- Exercise 5-1: Filtering SNP Data
+<details>
 
-- Exercise 5-2: Filtering SilicoDArT Data
+<summary><b>[Exercise 5-1: Filtering SNP Data</b>]{style="color:black; cursor:pointer"}</summary>
+
+</details>
+
+<details>
+
+<summary><b>[Exercise 5-2: Filtering SilicoDArT Data</b>]{style="color:black; cursor:pointer"}</summary>
+
+</details>
+
+
+<br>
 
 Chapter 6 Exercises
 
-- Exercise 6-1: Visualizing Structure
 
-Integrative Exercises
+<details>
 
-- Exercise 7-1: Camaroon Macrobrachium
+<summary><b>[Exercise 6-1: Visualizing Structure</b>]{style="color:black; cursor:pointer"}</summary>
 
-- Exercise 7-2: Western Sawshell Turtle
+</details>
 
-- Exercise 7-3: Northern Quoll
+<br>
+
+## Integrative Exercises
+
+### EXERCISES (click to expand)
+
+<details>
+
+<summary><b>[Exercise 7-1: Camaroon Macrobrachium</b>]{style="color:black; cursor:pointer"}</summary>
+
+</details>
+
+
+<details>
+
+<summary><b>[Exercise 7-2: Western Sawshell Turtle</b>]{style="color:black; cursor:pointer"}</summary>
+
+</details>
+
+
+<details>
+
+<summary><b>[Exercise 7-3: Northern Quoll</b>]{style="color:black; cursor:pointer"}</summary>
+
+</details>
 
